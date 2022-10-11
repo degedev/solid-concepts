@@ -2,7 +2,7 @@ import { User } from "../../model/User";
 import { IUsersRepository, ICreateUserDTO } from "../IUsersRepository";
 
 class UsersRepository implements IUsersRepository {
-  private users: User[];
+  private users: User[] = [];
 
   private static INSTANCE: UsersRepository;
 
@@ -19,23 +19,51 @@ class UsersRepository implements IUsersRepository {
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    // Complete aqui
+    const user = new User();
+
+    Object.assign(user, {
+      name,
+      email,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    this.users.push(user);
+
+    return user;
   }
 
   findById(id: string): User | undefined {
-    // Complete aqui
+    const searchedUserById = this.users.find((user) => user.id === id);
+
+    if (!searchedUserById) {
+      return undefined;
+    }
+
+    return searchedUserById;
   }
 
   findByEmail(email: string): User | undefined {
-    // Complete aqui
+    const searchedUserByEmail = this.users.find((user) => user.email === email);
+
+    if (!searchedUserByEmail) {
+      return undefined;
+    }
+
+    return searchedUserByEmail;
   }
 
   turnAdmin(receivedUser: User): User {
-    // Complete aqui
+    const user = receivedUser;
+
+    user.admin = true;
+    user.updated_at = new Date();
+
+    return user;
   }
 
   list(): User[] {
-    // Complete aqui
+    return this.users;
   }
 }
 
